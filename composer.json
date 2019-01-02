@@ -10,6 +10,12 @@
             "email": "sourcecode@intheloftstudios.com"
         }
     ],
+    "require": {
+        "spatie\/yaml-front-matter": "^2.0",
+        "mikehaertl\/phpwkhtmltopdf": "^2.3",
+        "erusev\/parsedown": "^1.7",
+        "twig\/twig": "^2.6"
+    },
     "autoload": {
         "psr-4": {
             "AKlump\\Documentation\\": "src"
