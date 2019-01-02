@@ -1,6 +1,6 @@
 template = simple
-master = "master"
-develop = "master"
+master = "master develop"
+develop = "master develop"
 remote = origin
 create_tags = patch
 push_tags = yes
