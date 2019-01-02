@@ -9,4 +9,4 @@ push_develop = no
 patch_prefix = .
 preserve_patch_zero = true
 git_root = .
-info_file = version.yml
+info_file = composer.json

@@ -1,8 +1,9 @@
 {
-    "name": "aklump\/documentation",
+    "name": "aklump/documentation",
+    "version": "1.0",
     "description": "",
     "license": "BSD-3-Clause",
-    "homepage": "https:\/\/github.com\/aklump\/documentation",
+    "homepage": "https://github.com/aklump/documentation",
     "authors": [
         {
             "name": "Aaron Klump",
