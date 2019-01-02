@@ -142,7 +142,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
    */
   protected function getSourceFileHtml($path_to_markdown_file) {
     $this->eventPath = $path_to_markdown_file;
-    $contents = $this->fireEvent('loaded', file_get_contents($path_to_markdown_file));
+    $contents = $this->fireEvent('fileload', file_get_contents($path_to_markdown_file));
     $contents = "---\n" . preg_replace("/^\-\-\-\n/s", '', $contents);
     $markdown = $this->fireEvent('markdown', YamlFrontMatter::parse($contents)
       ->body());
