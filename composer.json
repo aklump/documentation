@@ -1,0 +1,22 @@
+{
+    "name": "aklump\/documentation",
+    "description": "",
+    "license": "BSD-3-Clause",
+    "homepage": "https:\/\/github.com\/aklump\/documentation",
+    "authors": [
+        {
+            "name": "Aaron Klump",
+            "email": "sourcecode@intheloftstudios.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "AKlump\\Documentation\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AKlump\\Documentation\\": "tests/src"
+        }
+    }
+}
