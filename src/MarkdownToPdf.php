@@ -201,6 +201,38 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
   }
 
   /**
+   * Resolve relative links in an html string to a given basepath.
+   *
+   * @param string $basepath
+   *   The basepath to prepend to all relative links.
+   * @param $html
+   *   An html string containing one or more relative links.
+   *
+   * @return string|string[]|null
+   */
+  protected function resolveLinksInHtml($basepath, $html) {
+
+    if (!is_dir($basepath)) {
+      throw new \InvalidArgumentException("\"$basepath\" is not a directory.");
+    }
+
+    $images_dir = rtrim(rtrim($basepath, '/') . '/images', '/');
+    $html = preg_replace_callback('/((?:href|src)=")(.+?)(")/', function ($matches) use ($basepath, $images_dir) {
+      array_shift($matches);
+      if (preg_match('/^images/', $matches[1])) {
+        $matches[1] = str_replace("images/", "$images_dir/", $matches[1]);
+      }
+      elseif (!preg_match('/^http/', $matches[1])) {
+        $matches[1] = rtrim($basepath, '/') . '/' . trim($matches[1], '/');
+      }
+
+      return implode($matches);
+    }, $html);
+
+    return $html;
+  }
+
+  /**
    * Fire a mutation event.
    *
    * @param string $event
@@ -381,6 +413,12 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
         }),
         'margin-top' => $page_top,
         'margin-bottom' => $page_bottom,
+        'margin-left' => $this->getInlineCssStyleValue('margin-left', $data, function ($value) {
+          return $this->inchesToMm($value);
+        }),
+        'margin-right' => $this->getInlineCssStyleValue('margin-left', $data, function ($value) {
+          return $this->inchesToMm($value);
+        }),
       ];
       $config += $default_config;
     }
