@@ -328,10 +328,10 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
         (string) $data->footer->center,
         (string) $data->footer->right,
       ];
-      $has_footer = !empty(trim(implode('', $header)));
+      $has_footer = !empty(trim(implode('', $footer)));
       $footer_spacing = 0;
       if ($has_footer) {
-        $footer_spacing = $this->getInlineCssStyleValue('margin-bottom', $data->header, function ($value) {
+        $footer_spacing = $this->getInlineCssStyleValue('margin-top', $data->footer, function ($value) {
           return $this->inchesToMm($value);
         });
       }
@@ -361,7 +361,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
       };
 
       $config = [
-        // Spacing between footer and content in mm.
+        // Spacing between footer and content in mm
         'footer-spacing' => $footer_spacing,
         'footer-font-name' => $this->getInlineCssStyleValue('font-family', $data->footer, $first_csv),
         'footer-font-size' => $this->getInlineCssStyleValue('font-size', $data->footer, 'intval'),
@@ -374,7 +374,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
         'header-center' => $header[1],
         'header-right' => $header[2],
 
-        // Spacing between header and content in mm.
+        // Spacing between header and content in mm
         'header-spacing' => $header_spacing,
         'margin-bottom' => $this->getInlineCssStyleValue('margin-bottom', $data, function ($value) {
           return $this->inchesToMm($value);
