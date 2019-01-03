@@ -291,6 +291,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
   protected function getWkHtmlToPdfConfig() {
     $default_config = [
       0 => 'enable-forms',
+      'page-size' => 'Letter',
     ];
 
     try {
@@ -309,16 +310,48 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
     if (!empty($xml)) {
       $data = simplexml_load_string($xml);
 
-      $header_spacing = $this->getInlineCssStyleValue('margin-bottom', $data->header, function ($value) {
-        return $this->inchesToMm($value);
-      });
+      $header = [
+        (string) $data->header->left,
+        (string) $data->header->center,
+        (string) $data->header->right,
+      ];
+      $has_header = !empty(trim(implode('', $header)));
+      $header_spacing = 0;
+      if ($has_header) {
+        $header_spacing = $this->getInlineCssStyleValue('margin-bottom', $data->header, function ($value) {
+          return $this->inchesToMm($value);
+        });
+      }
 
-      // For some reason the spacing doesn't seem to work right, so we try to normalize here.
-      $header_spacing *= .66;
+      $footer = [
+        (string) $data->footer->left,
+        (string) $data->footer->center,
+        (string) $data->footer->right,
+      ];
+      $has_footer = !empty(trim(implode('', $header)));
+      $footer_spacing = 0;
+      if ($has_footer) {
+        $footer_spacing = $this->getInlineCssStyleValue('margin-bottom', $data->header, function ($value) {
+          return $this->inchesToMm($value);
+        });
+      }
+
+      $min_header_footer_margin = 5;
+
       $page_top = $this->getInlineCssStyleValue('margin-top', $data, function ($value) {
         return $this->inchesToMm($value);
       });
+      // If there is a header then we need to have a minium page top or the header won't show.
+      $page_top = max($has_header ? $min_header_footer_margin : 0, $page_top);
+      // For some reason the spacing doesn't seem to work right, so we try to normalize here.
       $page_top += $header_spacing;
+
+      $page_bottom = $this->getInlineCssStyleValue('margin-top', $data, function ($value) {
+        return $this->inchesToMm($value);
+      });
+      // If there is a header then we need to have a minium page top or the header won't show.
+      $page_bottom = max($has_footer ? $min_header_footer_margin : 0, $page_bottom);
+      $page_bottom += $footer_spacing;
 
       // Return the first value of a CSV string.
       $first_csv = function ($value) {
@@ -328,21 +361,26 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
       };
 
       $config = [
-        'footer-center' => (string) $data->footer->center,
+        // Spacing between footer and content in mm.
+        'footer-spacing' => $footer_spacing,
         'footer-font-name' => $this->getInlineCssStyleValue('font-family', $data->footer, $first_csv),
         'footer-font-size' => $this->getInlineCssStyleValue('font-size', $data->footer, 'intval'),
-        'footer-left' => (string) $data->footer->left,
-        'footer-right' => (string) $data->footer->right,
-        'header-center' => (string) $data->header->center,
+        'footer-left' => $footer[0],
+        'footer-center' => $footer[1],
+        'footer-right' => $footer[2],
         'header-font-name' => $this->getInlineCssStyleValue('font-family', $data->header, $first_csv),
         'header-font-size' => $this->getInlineCssStyleValue('font-size', $data->header, 'intval'),
-        'header-left' => (string) $data->header->left,
-        'header-right' => (string) $data->header->right,
+        'header-left' => $header[0],
+        'header-center' => $header[1],
+        'header-right' => $header[2],
+
+        // Spacing between header and content in mm.
         'header-spacing' => $header_spacing,
         'margin-bottom' => $this->getInlineCssStyleValue('margin-bottom', $data, function ($value) {
           return $this->inchesToMm($value);
         }),
         'margin-top' => $page_top,
+        'margin-bottom' => $page_bottom,
       ];
       $config += $default_config;
     }
