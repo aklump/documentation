@@ -150,9 +150,19 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
     $html = $this->fireEvent('html', $parsedown->text($markdown));
     $twig = $this->getTwig();
     $template = $twig->createTemplate($html);
-    $html = $template->render([]);
+    $html = $template->render($this->getTokens());
 
     return $html;
+  }
+
+  /**
+   * Return an array of tokens that can be used in html rendering.
+   *
+   * @return array
+   *   This is an array that can be used by twig.
+   */
+  protected function getTokens() {
+    return [];
   }
 
   /**
@@ -243,7 +253,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
    * @return mixed
    *   The data returned from the mutator.
    */
-  private function fireEvent($event, $data) {
+  protected function fireEvent($event, $data) {
     $method = "onProcess$event";
     if (method_exists($this, $method)) {
       $data = $this->{$method}($data, $this->eventPath);
