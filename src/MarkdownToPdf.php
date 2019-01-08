@@ -148,7 +148,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
       ->body());
     $parsedown = new Parsedown();
     $html = $this->fireEvent('html', $parsedown->text($markdown));
-    $twig = $this->getTwig();
+    $twig = $this->getTwigForTokenReplacement();
     $template = $twig->createTemplate($html);
     $html = $template->render($this->getTokens());
 
@@ -265,11 +265,32 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
   /**
    * Return a configured Twig environment.
    *
+   * @param array $options
+   *   Options to use when creating environment.
+   *
    * @return \Twig_Environment
    *   A twig environment with the template dirs loaded.
+   *
+   * @link https://twig.symfony.com/doc/1.x/api.html
    */
-  protected function getTwig() {
-    return new Twig_Environment(new Twig_Loader_Filesystem($this->getTemplateDirs()));
+  protected function getTwig(array $options = []) {
+    return new Twig_Environment(new Twig_Loader_Filesystem($this->getTemplateDirs()), $options);
+  }
+
+  /**
+   * Return the Twig instance for use with token replacement.
+   *
+   * This is isolated so it can be extended to allow for custom options, such
+   * as enabling autoescape, which has been disabled by default.
+   *
+   * @return \Twig_Environment
+   *   A twig environment that will be used for replacing tokens in the HTML
+   *   files.
+   *
+   * @link https://twig.symfony.com/doc/1.x/api.html
+   */
+  protected function getTwigForTokenReplacement() {
+    return $this->getTwig(['autoescape' => FALSE]);
   }
 
   /**
@@ -403,7 +424,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
       };
 
       $config = [
-        // Spacing between footer and content in mm
+        // Spacing between footer and content in mm.
         'footer-spacing' => $footer_spacing,
         'footer-font-name' => $this->getInlineCssStyleValue('font-family', $data->footer, $first_csv),
         'footer-font-size' => $this->getInlineCssStyleValue('font-size', $data->footer, 'intval'),
@@ -416,7 +437,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
         'header-center' => $header[1],
         'header-right' => $header[2],
 
-        // Spacing between header and content in mm
+        // Spacing between header and content in mm.
         'header-spacing' => $header_spacing,
         'margin-bottom' => $this->getInlineCssStyleValue('margin-bottom', $data, function ($value) {
           return $this->inchesToMm($value);
