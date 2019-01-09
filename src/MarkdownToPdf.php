@@ -180,6 +180,26 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
   }
 
   /**
+   * Return an array of URL variants to use for tokens.
+   *
+   * @param string $url
+   *   A domain URL.
+   *
+   * @return array
+   *   With these keys:
+   *   - url string The url with trailing / stripped
+   *   - pretty string The url with http:// stripped
+   *   - link string An HTML <a> tag with the url as the target.
+   */
+  protected function getUrlTokens($url) {
+    return [
+      'url' => ($url = rtrim($url, '/')),
+      'pretty' => ($clean = preg_replace('/^https?:\/\//', '', $url)),
+      'link' => '<a href="' . $url . '">' . $clean . '</a>',
+    ];
+  }
+
+  /**
    * Modify the loaded content for a SINGLE markdown file before parsing.
    *
    * @param string $content
