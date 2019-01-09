@@ -1,0 +1,24 @@
+{#
+Control the layout, header and footer of the PDF document.
+
+Available variables:
+- pageNumber
+- totalPages
+- project.name
+#}
+<?xml version="1.0" encoding="UTF-8"?>
+<page style="margin-top: .4in; margin-bottom:.4in; margin-left: .5in;
+margin-right: .5in">
+  <header style="margin-bottom: 0">
+    <left></left>
+    <center></center>
+    <right></right>
+  </header>
+  {{ page }}
+  <footer style="font-size: 8px; font-family: Thasadith">
+    <left>{{ "now"|date('M d, Y, H:ma', timezone="America/Los_Angeles")
+      }}</left>
+    <center>{{ project.name }}</center>
+    <right>{{ pageNumber }}/{{ totalPages }}</right>
+  </footer>
+</page>

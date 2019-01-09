@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  {% block head %}
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#https://purecss.io/#}
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    {% for style in page.styles %}
+      <link rel="stylesheet" href="{{ style }}">
+    {% endfor %}
+  {% endblock %}
+</head>
+<body>
+{% block body %}
+  Content goes here.
+{% endblock %}
+</body>
+</html>
+
+
+
+

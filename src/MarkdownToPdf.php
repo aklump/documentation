@@ -90,7 +90,21 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
    * @return array
    *   An array of paths to directories to be searched for Twig templates.
    */
-  abstract protected function getTemplateDirs();
+  protected function getTemplateDirs() {
+    return [__DIR__ . '/templates'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCompiledHtml() {
+    return $this->getTwig()->render('page.twig', [
+      'page' => [
+        'title' => 'Page Title',
+        'styles' => $this->getCssStylesheets(),
+      ],
+    ]);
+  }
 
   /**
    * {@inheritdoc}
@@ -447,7 +461,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
         'margin-left' => $this->getInlineCssStyleValue('margin-left', $data, function ($value) {
           return $this->inchesToMm($value);
         }),
-        'margin-right' => $this->getInlineCssStyleValue('margin-left', $data, function ($value) {
+        'margin-right' => $this->getInlineCssStyleValue('margin-right', $data, function ($value) {
           return $this->inchesToMm($value);
         }),
       ];
@@ -456,7 +470,6 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
 
     return $config;
   }
-
 
   /**
    * {@inheritdoc}
