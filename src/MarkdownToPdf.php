@@ -234,7 +234,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
    *
    * @return string|string[]|null
    */
-  protected function resolveLinksInHtml($basepath, $html) {
+  protected function resolveRelativeFilepathsInString($basepath, $html) {
 
     if (!is_dir($basepath)) {
       throw new \InvalidArgumentException("\"$basepath\" is not a directory.");
