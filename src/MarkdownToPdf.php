@@ -305,7 +305,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
   private function inchesToMm($inches) {
     $inches = preg_replace('/[^\d\.]/', '', $inches);
 
-    return round($inches * 25.4, 2);
+    return is_numeric($inches) ? round($inches * 25.4, 2) : 0;
   }
 
   /**
