@@ -1,10 +1,10 @@
 template = simple
-master = "master develop"
-develop = "master develop"
+master = "master"
+develop = "master"
 remote = origin
 create_tags = patch
-push_tags = yes
-push_master = yes
+push_tags = auto
+push_master = auto
 push_develop = no
 patch_prefix = .
 preserve_patch_zero = true
