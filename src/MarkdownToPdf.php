@@ -59,7 +59,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
       $markdown_filepaths = array_merge($markdown_filepaths, $items);
     }
 
-    $markdown_filepaths = array_unique($markdown_filepaths);
+    $markdown_filepaths = array_map('realpath', array_unique($markdown_filepaths));
     if (empty($markdown_filepaths)) {
       throw new \RuntimeException("There are no source files to convert.");
     }
