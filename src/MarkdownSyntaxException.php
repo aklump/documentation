@@ -22,7 +22,7 @@ class MarkdownSyntaxException extends \Exception {
    *   [optional] The previous throwable used for the exception chaining.
    */
   public function __construct($filepath, $message = "", $code = 0, Throwable $previous = NULL) {
-    return parent::__construct('Problem in file "' . basename($filepath) . '": ' . $message, $code, $previous);
+    return parent::__construct('Problem in file "' . $filepath . '": ' . $message, $code, $previous);
   }
 
 }
