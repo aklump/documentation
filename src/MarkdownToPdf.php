@@ -7,6 +7,7 @@ use Parsedown;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Webmozart\Glob\Glob;
 
 /**
  * Parent class for solutions that convert markdown files to PDF.
@@ -55,7 +56,7 @@ abstract class MarkdownToPdf implements MarkdownToPdfInterface {
       throw new \RuntimeException("\$this->markdownGlobDirs cannot be empty.");
     }
     foreach ($this->markdownGlobDirs as $glob_dir) {
-      $items = glob($glob_dir . '/*.md');
+      $items = Glob::glob($glob_dir . '/*.md');
       $markdown_filepaths = array_merge($markdown_filepaths, $items);
     }
 
