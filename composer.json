@@ -21,10 +21,5 @@
     "psr-4": {
       "AKlump\\Documentation\\": "src"
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "AKlump\\Documentation\\": "tests/src"
-    }
   }
 }
